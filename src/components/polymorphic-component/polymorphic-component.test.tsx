@@ -1,46 +1,27 @@
-import { render, screen } from '@testing-library/react';
 import { PolymorphicComponent } from './polymorphic-component';
-import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
 
-describe('PolymorphicComponent', () => {
-  it(`'as' prop이 전달된 대로 태그를 렌더링 할 수 있다.`, () => {
-    const { container } = render(<PolymorphicComponent as="section" />);
-    expect(container.firstChild?.nodeName).toBe('SECTION');
-  });
-
-  it(`'as' prop이 전달되지 않으면, 기본적으로 div tag로 렌더링 할 수 있다.`, () => {
+describe('<PolymorphicComponent>', () => {
+  it('기본 태그는 div이다.', () => {
     const { container } = render(<PolymorphicComponent />);
-    expect(container.firstChild?.nodeName).toBe('DIV');
+
+    expect(container.firstChild).toBeInstanceOf(HTMLDivElement);
   });
 
-  it(`'as' prop이 'a'로 전달되면, 'href' 속성을 전달할 수 있다.`, () => {
-    const { container } = render(
-      <PolymorphicComponent
-        as="a"
-        href="https://example.com"
-      >
-        am I a link?
-      </PolymorphicComponent>,
-    );
+  it('as prop을 통해 태그를 변경할 수 있다.', () => {
+    const { container } = render(<PolymorphicComponent as="button" />);
 
-    expect(container.firstChild?.nodeName).toBe('A');
-    expect(screen.getByRole('link')).toHaveProperty(
-      'href',
-      'https://example.com/',
-    );
+    expect(container.firstChild).toBeInstanceOf(HTMLButtonElement);
   });
 
-  it(`'as' prop이 'button'일 경우, 'href' 속성이 무시된다.`, () => {
+  it('as를 통해 변경된 태그에는 해당 태그의 속성이 존재한다.', () => {
     const { container } = render(
       <PolymorphicComponent
         as="button"
-        href="https://example.com"
-      >
-        am I a button?
-      </PolymorphicComponent>,
+        type="button"
+      />,
     );
 
-    expect(container.firstChild?.nodeName).toBe('BUTTON');
-    expect(screen.queryByRole('link')).toBeNull();
+    expect(container.firstChild).toHaveAttribute('type', 'button');
   });
 });

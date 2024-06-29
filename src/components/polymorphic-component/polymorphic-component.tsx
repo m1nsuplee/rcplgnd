@@ -1,18 +1,21 @@
-import React from 'react';
+import { forwardRef } from 'react';
+import {
+  PolymorphicComponentProps,
+  PolymorphicComponentType,
+  PolymorphicRef,
+} from 'types';
 
-type PolymorphicComponentProps<E extends React.ElementType> = {
-  as?: E;
-} & React.ComponentPropsWithoutRef<E>;
+export const PolymorphicComponent: PolymorphicComponentType = forwardRef(
+  function PolymorphicComponentWithRef<C extends React.ElementType = 'div'>(
+    props: PolymorphicComponentProps<C>,
+    ref?: PolymorphicRef<C>,
+  ) {
+    const { as, ...rest } = props;
 
-export const PolymorphicComponent = React.forwardRef(
-  <E extends React.ElementType = 'div'>(
-    props: PolymorphicComponentProps<E>,
-    ref: React.Ref<HTMLDivElement>,
-  ) => {
-    const { as: Element = 'div', ...rest } = props;
+    const Component = as || 'div';
 
     return (
-      <Element
+      <Component
         ref={ref}
         {...rest}
       />
