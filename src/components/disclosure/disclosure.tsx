@@ -87,7 +87,7 @@ export function Disclosure({
   defaultOpen = false,
   children,
 }: DisclosureProps): JSX.Element {
-  const disclosure = useDisclosure(defaultOpen);
+  const disclosureProps = useDisclosure(defaultOpen);
 
-  return children(disclosure);
+  return children(disclosureProps);
 }
