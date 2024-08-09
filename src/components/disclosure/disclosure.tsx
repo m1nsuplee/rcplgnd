@@ -19,21 +19,19 @@ type DisclosureActions = {
 };
 
 function disclosureReducer(
-  state: DisclosureStateDefinition,
+  { state: prevState }: DisclosureStateDefinition,
   action: DisclosureActions,
 ): DisclosureStateDefinition {
   switch (action.type) {
     case DisclosureActionTypes.Toggle:
       return {
-        ...state,
         state:
-          state.state === DisclosureStates.Open
+          prevState === DisclosureStates.Open
             ? DisclosureStates.Closed
             : DisclosureStates.Open,
       };
     case DisclosureActionTypes.Close:
       return {
-        ...state,
         state: DisclosureStates.Closed,
       };
     default:
